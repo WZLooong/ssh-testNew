@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工具状态更新</title>
+</head>
+<body>
+    <h1>工具状态更新</h1>
+    <form method="post">
+        <label for="tool_name">工具名称:</label>
+        <input type="text" id="tool_name" name="tool_name" required><br>
+        <label for="new_status">新状态:</label>
+        <select id="new_status" name="new_status">
+            <option value="可用">可用</option>
+            <option value="借出">借出</option>
+            <option value="维修中">维修中</option>
+            <option value="报废">报废</option>
+        </select><br>
+        <input type="submit" value="更新">
+    </form>
+</body>
+</html>

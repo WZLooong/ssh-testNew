@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工具分类检索</title>
+</head>
+<body>
+    <h1>工具分类检索</h1>
+    <form method="get">
+        <label for="keyword">关键词:</label>
+        <input type="text" id="keyword" name="keyword"><br>
+        <label for="category">分类:</label>
+        <input type="text" id="category" name="category"><br>
+        <input type="submit" value="搜索">
+    </form>
+    <h2>搜索结果</h2>
+    <ul>
+        {% for tool in tools %}
+            <li>
+                工具名称: {{ tool.tool_name }}, 型号: {{ tool.model }}, 状态: {{ tool.status }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
