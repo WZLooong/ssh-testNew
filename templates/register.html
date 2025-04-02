@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>注册</h2>
+        <form id="register-form">
+            <input type="text" id="username" placeholder="手机号或邮箱" required>
+            <input type="password" id="password" placeholder="密码" required>
+            <select id="role">
+                <option value="tool_admin">工具管理员</option>
+                <option value="worker">机务工作人员</option>
+                <option value="manager">部门管理人员</option>
+            </select>
+            <button type="submit">注册</button>
+        </form>
+        <p>已有账号？<a href="{{ url_for('login_page') }}">登录</a></p>
+    </div>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password, role })
+            })
+           .then(response => response.json())
+           .then(data => {
+                alert(data.message);
+                if (data.message === 'User registered successfully') {
+                    window.location.href = "{{ url_for('login_page') }}";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

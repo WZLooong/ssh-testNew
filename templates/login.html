@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>登录</h2>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="手机号或邮箱" required>
+            <input type="password" id="password" placeholder="密码" required>
+            <button type="submit">登录</button>
+        </form>
+        <p>还没有账号？<a href="{{ url_for('register_page') }}">注册</a></p>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+           .then(response => response.json())
+           .then(data => {
+                alert(data.message);
+                if (data.message === 'Login successful') {
+                    // 这里可以添加跳转到对应角色页面的逻辑
+                }
+            });
+        });
+    </script>
+</body>
+</html>
