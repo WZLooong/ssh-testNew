@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for
+# 问题可能是由于 mysql-connector-python 库未安装导致的
+# 可以使用以下命令安装该库
+# pip install mysql-connector-python
+import mysql.connector
 
 app = Flask(__name__)
 
-# 模拟用户数据库
-users = {}
+# 连接到 MySQL 数据库
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="wzlooong",
+    password="88888888",
+    database="toolAPP"
+)
+mycursor = mydb.cursor()
 
 # 模拟工具数据库
 tools = []
@@ -17,7 +27,12 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if username in users and users[username] == password:
+        # 查询数据库验证用户信息
+        sql = "SELECT * FROM users WHERE username = %s AND password = %s"
+        val = (username, password)
+        mycursor.execute(sql, val)
+        user = mycursor.fetchone()
+        if user:
             return "登录成功！"
         else:
             return "用户名或密码错误，请重试。"
@@ -28,9 +43,18 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        if username in users:
+        # 检查用户名是否已存在
+        sql = "SELECT * FROM users WHERE username = %s"
+        val = (username,)
+        mycursor.execute(sql, val)
+        user = mycursor.fetchone()
+        if user:
             return "该用户名已存在，请选择其他用户名。"
-        users[username] = password
+        # 插入新用户信息
+        sql = "INSERT INTO users (username, password) VALUES (%s, %s)"
+        val = (username, password)
+        mycursor.execute(sql, val)
+        mydb.commit()
         return "注册成功！请前往 <a href='/login'>登录</a>"
     return render_template('register.html')
 
